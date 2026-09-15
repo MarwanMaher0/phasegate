@@ -1,0 +1,65 @@
+name: Bug report
+description: Something in phasegate does not work the way the README says it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. Security problems do not belong here: report them privately
+        through [Report a vulnerability](https://github.com/MarwanMaher0/phasegate/security/advisories/new).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, including any error message or output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The smallest set of steps that shows the problem. Include the command you ran and its full output (use --no-color).
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options:
+        - CLI
+        - GitHub Action
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: phasegate version or tag
+      placeholder: "v0.1.0 (npx phasegate --version)"
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version and OS
+      placeholder: "Node 22.9, Ubuntu 24.04"
+  - type: textarea
+    id: config
+    attributes:
+      label: phasegate.config.yaml
+      description: The relevant part of your config.
+      render: yaml
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots, logs, or what you already tried.
