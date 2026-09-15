@@ -1,0 +1,22 @@
+name: phasegate
+description: Check that each project phase is really done — acceptance criteria written, decisions accepted, release checklist ticked — before the team moves on.
+author: Marwan Maher
+branding:
+  icon: check-square
+  color: blue
+inputs:
+  phase:
+    description: Check only this phase. By default every phase before `current` in the config is checked.
+    required: false
+    default: ''
+  strict:
+    description: Make recommended gates fail the check too.
+    required: false
+    default: 'false'
+  config:
+    description: Path to the phasegate config, relative to the repository root.
+    required: false
+    default: ''
+runs:
+  using: node20
+  main: dist/action.js
