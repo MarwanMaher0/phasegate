@@ -1,0 +1,141 @@
+# phasegate configuration (standard profile)
+#
+# Phases run in order. Each phase lists the artifacts it produces and the gates:
+# evidence that must be true before the team moves past that phase.
+#
+#   npx phasegate status           where are we?
+#   npx phasegate next             the single most important missing thing
+#   npx phasegate check            for CI: fail if a phase before `current` is incomplete
+#   npx phasegate explain design   why a phase exists and how teams skip it
+#
+# Every gate accepts `level: required` (default) or `level: recommended`.
+# Recommended gates only fail `check` when you pass --strict.
+
+version: 1
+
+# The phase the team is working in right now. `check` requires every gate of the
+# phases BEFORE this one to pass. Move it forward when `phasegate next` says so.
+current: discover
+
+phases:
+  - id: discover
+    artifacts:
+      - docs/phases/01-discover/problem-statement.md
+    gates:
+      - type: file-exists
+        path: docs/phases/01-discover/problem-statement.md
+      - type: section
+        path: docs/phases/01-discover/problem-statement.md
+        heading: Problem
+        hint: Describe what is going wrong today and what it costs, without naming a solution.
+      - type: section
+        path: docs/phases/01-discover/problem-statement.md
+        heading: Who is affected
+      - type: section
+        path: docs/phases/01-discover/problem-statement.md
+        heading: Success metrics
+        hint: List two to four measurable signals, each with a baseline, a target and how you will measure it.
+      - type: no-todo
+        path: docs/phases/01-discover/problem-statement.md
+
+  - id: requirements
+    artifacts:
+      - docs/phases/02-requirements/requirements.md
+    gates:
+      - type: file-exists
+        path: docs/phases/02-requirements/requirements.md
+      - type: acceptance-criteria
+        path: docs/phases/02-requirements/requirements.md
+        # Headings whose text matches this pattern are treated as requirements.
+        pattern: "^REQ-\\d+"
+      - type: section
+        path: docs/phases/02-requirements/requirements.md
+        heading: Non-goals
+      - type: no-todo
+        path: docs/phases/02-requirements/requirements.md
+
+  - id: design
+    artifacts:
+      - docs/phases/03-design/adr/*.md
+    gates:
+      - type: adr-status
+        path: docs/phases/03-design/adr/*.md
+        exclude: [template.md]
+        allowed: [Accepted, Superseded]
+      - type: no-todo
+        path: docs/phases/03-design/adr/*.md
+        exclude: [template.md]
+
+  - id: build
+    artifacts:
+      - docs/phases/04-build/definition-of-done.md
+    gates:
+      - type: file-exists
+        path: docs/phases/04-build/definition-of-done.md
+      - type: checklist
+        path: docs/phases/04-build/definition-of-done.md
+      # Off by default. Uncomment to make your test suite part of the build gate.
+      # Command gates run during `check`; `status` and `next` skip them unless
+      # you pass --run-commands.
+      # - type: command
+      #   run: npm test
+      #   timeout: 600
+
+  - id: test
+    artifacts:
+      - docs/phases/05-test/test-plan.md
+    gates:
+      - type: file-exists
+        path: docs/phases/05-test/test-plan.md
+      - type: section
+        path: docs/phases/05-test/test-plan.md
+        heading: Scope
+      - type: section
+        path: docs/phases/05-test/test-plan.md
+        heading: Requirement coverage
+        hint: Map every REQ-n to the test (or manual check) that proves it.
+      - type: section
+        path: docs/phases/05-test/test-plan.md
+        heading: Exit criteria
+      - type: no-todo
+        path: docs/phases/05-test/test-plan.md
+
+  - id: release
+    artifacts:
+      - docs/phases/06-release/release-checklist.md
+    gates:
+      - type: file-exists
+        path: docs/phases/06-release/release-checklist.md
+      - type: section
+        path: docs/phases/06-release/release-checklist.md
+        heading: Rollback steps
+        hint: Write the exact rollback steps, who runs them, and how long they take.
+      - type: checklist
+        path: docs/phases/06-release/release-checklist.md
+      - type: no-todo
+        path: docs/phases/06-release/release-checklist.md
+
+  - id: operate
+    artifacts:
+      - docs/phases/07-operate/runbook.md
+      - docs/phases/07-operate/post-incident-template.md
+    gates:
+      - type: file-exists
+        path: docs/phases/07-operate/runbook.md
+      - type: section
+        path: docs/phases/07-operate/runbook.md
+        heading: Service overview
+      - type: section
+        path: docs/phases/07-operate/runbook.md
+        heading: Alerts
+      - type: section
+        path: docs/phases/07-operate/runbook.md
+        heading: Recovery procedures
+      - type: section
+        path: docs/phases/07-operate/runbook.md
+        heading: Escalation
+      - type: file-exists
+        path: docs/phases/07-operate/post-incident-template.md
+        level: recommended
+      - type: no-todo
+        path: docs/phases/07-operate/runbook.md

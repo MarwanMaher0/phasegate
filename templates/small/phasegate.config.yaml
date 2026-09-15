@@ -1,0 +1,69 @@
+# phasegate configuration (small profile)
+#
+# Deliberately minimal, for side projects: one short document per phase and a
+# handful of gates. Switch to the standard profile when more people depend on
+# the project (`npx phasegate init --profile standard` in a fresh directory
+# shows what it adds).
+#
+#   npx phasegate status    where are we?
+#   npx phasegate next      the single most important missing thing
+#   npx phasegate check     for CI: fail if a phase before `current` is incomplete
+
+version: 1
+
+# The phase you are working in now. `check` requires the phases before it to pass.
+current: discover
+
+phases:
+  - id: discover
+    artifacts: [docs/phases/discover.md]
+    gates:
+      - type: section
+        path: docs/phases/discover.md
+        heading: Problem
+      - type: section
+        path: docs/phases/discover.md
+        heading: Success metric
+
+  - id: requirements
+    artifacts: [docs/phases/requirements.md]
+    gates:
+      - type: acceptance-criteria
+        path: docs/phases/requirements.md
+
+  - id: design
+    artifacts: [docs/phases/design.md]
+    gates:
+      - type: section
+        path: docs/phases/design.md
+        heading: Decisions
+
+  # Build has no document in the small profile. Uncomment to gate on your tests
+  # (command gates run during `check`):
+  - id: build
+    gates: []
+    #   - type: command
+    #     run: npm test
+
+  - id: test
+    artifacts: [docs/phases/test.md]
+    gates:
+      - type: section
+        path: docs/phases/test.md
+        heading: How I will know it works
+
+  - id: release
+    artifacts: [docs/phases/release.md]
+    gates:
+      - type: checklist
+        path: docs/phases/release.md
+      # Nothing unresolved when you ship.
+      - type: no-todo
+        path: docs/phases/*.md
+
+  - id: operate
+    artifacts: [docs/phases/operate.md]
+    gates:
+      - type: section
+        path: docs/phases/operate.md
+        heading: If it breaks
