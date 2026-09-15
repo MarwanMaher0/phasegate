@@ -1,0 +1,59 @@
+{
+  "name": "phasegate",
+  "version": "0.1.0",
+  "description": "CLI and GitHub Action that walks a project through its phases, discover to operate, with teaching templates and CI gates that catch the steps teams skip.",
+  "license": "MIT",
+  "author": "Marwan Maher",
+  "type": "module",
+  "bin": {
+    "phasegate": "dist/cli.js"
+  },
+  "files": [
+    "dist/cli.js",
+    "phases",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarwanMaher0/phasegate.git"
+  },
+  "homepage": "https://github.com/MarwanMaher0/phasegate#readme",
+  "bugs": {
+    "url": "https://github.com/MarwanMaher0/phasegate/issues"
+  },
+  "keywords": [
+    "cli",
+    "github-actions",
+    "sdlc",
+    "adr",
+    "release-checklist",
+    "acceptance-criteria",
+    "project-management"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "phasegate": "node dist/cli.js"
+  },
+  "dependencies": {
+    "commander": "14.0.3",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "20.19.43",
+    "esbuild": "0.28.2",
+    "eslint": "10.10.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "vitest": "4.1.11"
+  }
+}
