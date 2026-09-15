@@ -1,0 +1,58 @@
+# phasegate's own phase documents, checked in CI by phasegate's own Action.
+# Small profile, plus a build gate that the test suite exists.
+
+version: 1
+current: release
+
+phases:
+  - id: discover
+    artifacts: [docs/phases/discover.md]
+    gates:
+      - type: section
+        path: docs/phases/discover.md
+        heading: Problem
+      - type: section
+        path: docs/phases/discover.md
+        heading: Success metric
+
+  - id: requirements
+    artifacts: [docs/phases/requirements.md]
+    gates:
+      - type: acceptance-criteria
+        path: docs/phases/requirements.md
+
+  - id: design
+    artifacts: [docs/phases/design.md]
+    gates:
+      - type: section
+        path: docs/phases/design.md
+        heading: Decisions
+
+  - id: build
+    artifacts: [test/*.test.ts]
+    gates:
+      - type: file-exists
+        path: test/*.test.ts
+        name: the test suite exists
+
+  - id: test
+    artifacts: [docs/phases/test.md]
+    gates:
+      - type: section
+        path: docs/phases/test.md
+        heading: How I will know it works
+
+  - id: release
+    artifacts: [docs/phases/release.md]
+    gates:
+      - type: checklist
+        path: docs/phases/release.md
+      - type: no-todo
+        path: docs/phases/*.md
+
+  - id: operate
+    artifacts: [docs/phases/operate.md]
+    gates:
+      - type: section
+        path: docs/phases/operate.md
+        heading: If it breaks

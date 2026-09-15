@@ -1,0 +1,17 @@
+name: phasegate
+
+# phasegate checks its own phase documents with its own Action.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./

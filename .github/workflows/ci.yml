@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: dist/ is up to date with the source
+        run: git diff --exit-code -- dist || (echo "::error::dist/ is stale. Run npm run build and commit the result." && exit 1)
+      - name: CLI works end to end in a fresh project
+        run: |
+          tmp="$(mktemp -d)"
+          cd "$tmp"
+          node "$GITHUB_WORKSPACE/dist/cli.js" init
+          node "$GITHUB_WORKSPACE/dist/cli.js" status --no-color
+          node "$GITHUB_WORKSPACE/dist/cli.js" next --no-color
+          node "$GITHUB_WORKSPACE/dist/cli.js" check --no-color
+          set +e
+          node "$GITHUB_WORKSPACE/dist/cli.js" check --phase discover --no-color
+          code=$?
+          set -e
+          test "$code" -eq 1
